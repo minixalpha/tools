@@ -98,6 +98,48 @@
             font-variant-numeric: tabular-nums;
             color: #0969da;
         }
+        .city-image-wrapper {
+            position: relative;
+            flex-shrink: 0;
+        }
+        .image-tooltip {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.78);
+            color: #fff;
+            font-size: 0.65rem;
+            line-height: 1.4;
+            padding: 0.4rem 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+        .city-image-wrapper:hover .image-tooltip {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .image-tooltip strong {
+            color: #ddd;
+        }
+        .prompt-text {
+            display: inline;
+        }
+        .copy-prompt-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            font-size: 0.6rem;
+            padding: 0.1rem 0.35rem;
+            cursor: pointer;
+            margin-left: 0.3rem;
+            vertical-align: middle;
+        }
+        .copy-prompt-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
         @media (max-width: 560px) {
             .world-clock-grid {
                 grid-template-columns: 1fr;
@@ -124,18 +166,62 @@
             { country: 'Japan', city: 'Tokyo', timezone: 'Asia/Tokyo', image: 'assets/images/tokyo.webp' },
         ];
 
+        const promptTemplate = 'Present a clear, 45° top-down view of a vertical (1:1) isometric miniature 3D cartoon scene, highlighting iconic landmarks centered in the composition to showcase precise and delicate modeling.\n\nThe scene features soft, refined textures with realistic PBR materials and gentle, lifelike lighting and shadow effects.\n\nUse a clean, unified composition with minimalistic aesthetics and a soft, solid-colored background that highlights the main content. The overall visual style is fresh and soothing.\n\nFocus on architectural accuracy and stylized urban layout, ensuring the city\'s iconic landmarks are clearly recognizable within the isometric miniature environment.\n\nCity name:\u3010{city}\u3011';
+
+        const promptPreviewLength = 80;
+
         const grid = document.getElementById('world-clock-grid');
         worldCities.forEach(c => {
+            const prompt = promptTemplate.replace('{city}', c.city);
+            const preview = prompt.substring(0, promptPreviewLength) + '...';
             const card = document.createElement('div');
             card.className = 'city-card';
             card.innerHTML =
+                '<div class="city-image-wrapper">' +
                 '<img class="city-image" src="' + c.image + '" alt="' + c.city + '">' +
+                '<div class="image-tooltip">' +
+                '<strong>Model:</strong> Nano Banana Pro<br>' +
+                '<strong>Prompt:</strong> <span class="prompt-text">' + preview + '</span>' +
+                '<button class="copy-prompt-btn">Copy</button><br>' +
+                '<strong>Credit:</strong> Original prompt by @dotey on X' +
+                '</div>' +
+                '</div>' +
                 '<div class="city-card-body">' +
                 '<div class="city-label">' + c.country + '</div>' +
                 '<div class="city-name">' + c.city + '</div>' +
                 '<div class="city-date" id="wc-date-' + c.timezone + '"></div>' +
                 '<div class="city-time" id="wc-time-' + c.timezone + '"></div>' +
                 '</div>';
+            const btn = card.querySelector('.copy-prompt-btn');
+            btn.addEventListener('click', () => {
+                function onSuccess() {
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => btn.textContent = 'Copy', 1500);
+                }
+                function onFail() {
+                    btn.textContent = 'Failed';
+                    setTimeout(() => btn.textContent = 'Copy', 1500);
+                }
+                function fallbackCopy(text) {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    try {
+                        document.execCommand('copy') ? onSuccess() : onFail();
+                    } catch (e) {
+                        onFail();
+                    }
+                    document.body.removeChild(ta);
+                }
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(prompt).then(onSuccess, () => fallbackCopy(prompt));
+                } else {
+                    fallbackCopy(prompt);
+                }
+            });
             grid.appendChild(card);
         });
 
