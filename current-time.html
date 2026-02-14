@@ -53,8 +53,18 @@
             background: #f6f8fa;
             border: 1px solid #e1e4e8;
             border-radius: 10px;
-            padding: 1.25rem;
+            padding: 0;
+            overflow: hidden;
             transition: box-shadow 0.2s;
+        }
+        .city-image {
+            width: 100%;
+            aspect-ratio: 10 / 9;
+            object-fit: cover;
+            object-position: top;
+        }
+        .city-card-body {
+            padding: 1.25rem;
         }
         .city-card:hover {
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -103,10 +113,10 @@
 
     <script>
         const worldCities = [
-            { country: 'China', city: 'Beijing', timezone: 'Asia/Shanghai' },
-            { country: 'USA', city: 'New York', timezone: 'America/New_York' },
-            { country: 'UK', city: 'London', timezone: 'Europe/London' },
-            { country: 'Japan', city: 'Tokyo', timezone: 'Asia/Tokyo' },
+            { country: 'China', city: 'Beijing', timezone: 'Asia/Shanghai', image: 'assets/images/beijing.png' },
+            { country: 'USA', city: 'New York', timezone: 'America/New_York', image: 'assets/images/newyork.png' },
+            { country: 'UK', city: 'London', timezone: 'Europe/London', image: 'assets/images/london.png' },
+            { country: 'Japan', city: 'Tokyo', timezone: 'Asia/Tokyo', image: 'assets/images/tokyo.png' },
         ];
 
         const grid = document.getElementById('world-clock-grid');
@@ -114,10 +124,13 @@
             const card = document.createElement('div');
             card.className = 'city-card';
             card.innerHTML =
+                '<img class="city-image" src="' + c.image + '" alt="' + c.city + '">' +
+                '<div class="city-card-body">' +
                 '<div class="city-label">' + c.country + '</div>' +
                 '<div class="city-name">' + c.city + '</div>' +
                 '<div class="city-date" id="wc-date-' + c.timezone + '"></div>' +
-                '<div class="city-time" id="wc-time-' + c.timezone + '"></div>';
+                '<div class="city-time" id="wc-time-' + c.timezone + '"></div>' +
+                '</div>';
             grid.appendChild(card);
         });
 
