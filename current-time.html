@@ -8,15 +8,15 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.6;
+            line-height: 1.4;
             color: #333;
             max-width: 900px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 0.75rem 1rem;
         }
         h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            margin-bottom: 0.375rem;
         }
         p {
             color: #555;
@@ -24,61 +24,76 @@
         a { color: #0969da; text-decoration: none; }
         a:hover { text-decoration: underline; }
         #time {
-            font-size: 3rem;
+            font-size: 2.25rem;
             font-weight: bold;
-            margin: 2rem 0;
+            margin: 0.75rem 0;
             font-variant-numeric: tabular-nums;
         }
         #date {
-            font-size: 1.25rem;
+            font-size: 1rem;
             color: #555;
-            margin-bottom: 2rem;
+            margin-bottom: 0.75rem;
         }
         .world-clock-section {
-            margin-top: 2.5rem;
+            margin-top: 1rem;
             border-top: 1px solid #e1e4e8;
-            padding-top: 2rem;
+            padding-top: 0.75rem;
         }
         .world-clock-section h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1.25rem;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
             color: #24292f;
         }
         .world-clock-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+            gap: 0.5rem;
         }
         .city-card {
             background: #f6f8fa;
             border: 1px solid #e1e4e8;
             border-radius: 10px;
-            padding: 1.25rem;
+            padding: 0;
+            overflow: hidden;
             transition: box-shadow 0.2s;
+            display: flex;
+            flex-direction: row;
+        }
+        .city-image {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .city-card-body {
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         .city-card:hover {
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
         .city-card .city-label {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: #656d76;
             text-transform: uppercase;
             letter-spacing: 0.04em;
-            margin-bottom: 0.15rem;
+            margin-bottom: 0.1rem;
         }
         .city-card .city-name {
-            font-size: 1.15rem;
+            font-size: 1rem;
             font-weight: 600;
             color: #24292f;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.375rem;
         }
         .city-card .city-date {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #656d76;
             margin-bottom: 0.25rem;
         }
         .city-card .city-time {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 700;
             font-variant-numeric: tabular-nums;
             color: #0969da;
@@ -103,10 +118,10 @@
 
     <script>
         const worldCities = [
-            { country: 'China', city: 'Beijing', timezone: 'Asia/Shanghai' },
-            { country: 'USA', city: 'New York', timezone: 'America/New_York' },
-            { country: 'UK', city: 'London', timezone: 'Europe/London' },
-            { country: 'Japan', city: 'Tokyo', timezone: 'Asia/Tokyo' },
+            { country: 'China', city: 'Beijing', timezone: 'Asia/Shanghai', image: 'assets/images/beijing.webp' },
+            { country: 'USA', city: 'New York', timezone: 'America/New_York', image: 'assets/images/newyork.webp' },
+            { country: 'UK', city: 'London', timezone: 'Europe/London', image: 'assets/images/london.webp' },
+            { country: 'Japan', city: 'Tokyo', timezone: 'Asia/Tokyo', image: 'assets/images/tokyo.webp' },
         ];
 
         const grid = document.getElementById('world-clock-grid');
@@ -114,10 +129,13 @@
             const card = document.createElement('div');
             card.className = 'city-card';
             card.innerHTML =
+                '<img class="city-image" src="' + c.image + '" alt="' + c.city + '">' +
+                '<div class="city-card-body">' +
                 '<div class="city-label">' + c.country + '</div>' +
                 '<div class="city-name">' + c.city + '</div>' +
                 '<div class="city-date" id="wc-date-' + c.timezone + '"></div>' +
-                '<div class="city-time" id="wc-time-' + c.timezone + '"></div>';
+                '<div class="city-time" id="wc-time-' + c.timezone + '"></div>' +
+                '</div>';
             grid.appendChild(card);
         });
 
