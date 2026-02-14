@@ -194,10 +194,33 @@
                 '</div>';
             const btn = card.querySelector('.copy-prompt-btn');
             btn.addEventListener('click', () => {
-                navigator.clipboard.writeText(prompt).then(() => {
+                function onSuccess() {
                     btn.textContent = 'Copied!';
                     setTimeout(() => btn.textContent = 'Copy', 1500);
-                });
+                }
+                function onFail() {
+                    btn.textContent = 'Failed';
+                    setTimeout(() => btn.textContent = 'Copy', 1500);
+                }
+                function fallbackCopy(text) {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    try {
+                        document.execCommand('copy') ? onSuccess() : onFail();
+                    } catch (e) {
+                        onFail();
+                    }
+                    document.body.removeChild(ta);
+                }
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(prompt).then(onSuccess, () => fallbackCopy(prompt));
+                } else {
+                    fallbackCopy(prompt);
+                }
             });
             grid.appendChild(card);
         });
