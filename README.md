@@ -17,3 +17,7 @@ To enable GitHub Pages for this repository:
 5. Click **Save**.
 
 The site will be published at the URL above within a few minutes.
+
+## Tools
+
+- [Current Time](current-time.html): Display current time
