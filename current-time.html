@@ -57,13 +57,13 @@
             overflow: hidden;
             transition: box-shadow 0.2s;
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
         }
         .city-image {
-            width: 280px;
-            height: 280px;
+            width: 100%;
+            aspect-ratio: 43 / 24;
             object-fit: cover;
-            flex-shrink: 0;
+            display: block;
         }
         .city-card-body {
             padding: 0.5rem 0.75rem;
@@ -100,7 +100,6 @@
         }
         .city-image-wrapper {
             position: relative;
-            flex-shrink: 0;
         }
         .image-tooltip {
             position: absolute;
