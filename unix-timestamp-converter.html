@@ -72,13 +72,9 @@
             margin-bottom: 0.75rem;
             flex-wrap: wrap;
         }
-        @media (max-width: 480px) {
-            .input-row input {
-                width: 100%;
-            }
-        }
         .input-row input {
             flex: 1;
+            min-width: 0;
             padding: 0.5rem 0.75rem;
             font-size: 1rem;
             border: 1px solid #d0d7de;
@@ -89,6 +85,10 @@
         .input-row input:focus {
             border-color: #0969da;
             box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.15);
+        }
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
         }
         .input-row button {
             padding: 0.5rem 1rem;
@@ -102,6 +102,21 @@
         }
         .input-row button:hover {
             background: #0860ca;
+        }
+        @media (max-width: 480px) {
+            .input-row {
+                flex-direction: column;
+            }
+            .input-row input {
+                width: 100%;
+            }
+            .btn-group {
+                display: flex;
+                gap: 0.5rem;
+            }
+            .btn-group button {
+                flex: 1;
+            }
         }
 
         .result-table {
@@ -149,8 +164,10 @@
         <div class="converter-box">
             <div class="input-row">
                 <input type="text" id="ts-input" placeholder="Enter Unix timestamp in milliseconds">
-                <button id="convert-btn">Convert</button>
-                <button id="now-btn" style="background:#2da44e;">Now</button>
+                <div class="btn-group">
+                    <button id="convert-btn">Convert</button>
+                    <button id="now-btn" style="background:#2da44e;">Now</button>
+                </div>
             </div>
             <div class="error-msg" id="error-msg"></div>
             <table class="result-table" id="result-table" style="display:none;">
