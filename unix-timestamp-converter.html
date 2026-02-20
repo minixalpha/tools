@@ -254,6 +254,16 @@
             if (e.key === 'Enter') convert(this.value.trim());
         });
 
+        document.getElementById('ts-input').addEventListener('input', function() {
+            const val = this.value.trim();
+            if (val === '') {
+                document.getElementById('error-msg').style.display = 'none';
+                document.getElementById('result-table').style.display = 'none';
+                return;
+            }
+            convert(val);
+        });
+
         document.getElementById('now-btn').addEventListener('click', function() {
             const now = Date.now();
             document.getElementById('ts-input').value = now;
